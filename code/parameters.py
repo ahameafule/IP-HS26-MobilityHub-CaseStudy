@@ -173,7 +173,7 @@ globals().update(NOMINAL_PARAMS)
 # -----------------------------------------------------------------------------
 # OPTION A: Define by Municipalities / Regions (Empty when in "zones" mode)
 # -----------------------------------------------------------------------------
-CORRIDOR_REGIONS = {  # Named municipality groups defining the modeled corridor.
+""" CORRIDOR_REGIONS = {  # Named municipality groups defining the modeled corridor.
     "Zürich": ["Zürich"],
     "Winterthur": ["Winterthur"],
     "Airport / Glattal": [
@@ -185,7 +185,13 @@ CORRIDOR_REGIONS = {  # Named municipality groups defining the modeled corridor.
         "Wiesendangen", "Elsau",
         "Elgg", "Hagenbuch"
     ]
-}
+} """
+
+CORRIDOR_REGIONS = {
+    "Mobility-Hub": ["Küsnacht (ZH)", "Maur"],
+    "Zürich": ["Zürich", "Zumikon", "Zollikon"],
+    "Glatttal": ["Fällanden", "Schwerzenbach","Dübendorf","Volketswil"],
+    "Oberland": ["Uster", "Egg", "Mönchaltorf", "Wetzikon (ZH)"],}
 
 # Flat list of all corridor municipalities
 CORRIDOR_MUNICIPALITIES = [  # Derived flat list used by corridor selection and stage definitions.
@@ -195,36 +201,36 @@ CORRIDOR_MUNICIPALITIES = [  # Derived flat list used by corridor selection and 
 # Optional project-relative or absolute detailed road-network cache path.
 # Notebook 02 prepares a missing cache; later notebooks require it to exist.
 # None uses the existing default cache. For a new project, select a new filename.
-DETAILED_NETWORK_FILE = None  # Example: "data/processed/my_project_detailed_network.pkl"
+DETAILED_NETWORK_FILE = "data/processed/mobility_hub_detailed_network.pkl"
 
 # -----------------------------------------------------------------------------
 # OPTION B: Define by Explicit Zone IDs
 # -----------------------------------------------------------------------------
 # Example: enable zone selection, define groups, then flatten their IDs.
-# CORRIDOR_DEFINITION_MODE = "zones"
-# PROJECT_ZONES = {
-#     # 1. Zürich Eastern Alignment into CBD: Bellevue, Stadelhofen, Kreuzplatz, Römerhof,
-#     #    Hegibachplatz, Burgwies, Balgrist, Rehalp (S18 border loop), and Witikon
-#     "Zurich_S18_Alignment": [
-#         "26101165", "26101169", "26101171", "26101173", "26101174",
-#         "26101180", "26101181", "26101183", "26101185", "26101187",
-#         "26101189", "26101190", "26101194", "26101195", "26101198",
-#         "26101199", "26101201", "26101202", "26101203", "26101204",
-#         "26101209", "26101210", "26101215", "26101216", "26101218",
-#         "26101220", "26101221", "26101222", "26101225", "26101227",
-#         "26101228", "26101229", "26101231", "26101234", "26101235",
-#         "26101236", "26101242", "26101243", "26101245", "26101248",
-#         "26101251", "26101252", "26101255", "26101259", "26101262",
-#         "26101263", "26101264", "26101265", "26101267", "26101272",
-#         "26101273", "26101274", "26101275", "26101278", "26101281",
-#         "26101282", "26101283", "26101285", "26101287", "26101288",
-#         "26101289", "26101290", "26101294", "26101295", "26101296",
-#         "26101300", "26101301", "26101303", "26101304", "26101305",
-#     ]
+"""CORRIDOR_DEFINITION_MODE = "zones"
+PROJECT_ZONES = {
+     # 1. Zürich Eastern Alignment into CBD: Bellevue, Stadelhofen, Kreuzplatz, Römerhof,
+     #    Hegibachplatz, Burgwies, Balgrist, Rehalp (S18 border loop), and Witikon
+     "Zurich_S18_Alignment": [
+         "26101165", "26101169", "26101171", "26101173", "26101174",
+         "26101180", "26101181", "26101183", "26101185", "26101187",
+         "26101189", "26101190", "26101194", "26101195", "26101198",
+         "26101199", "26101201", "26101202", "26101203", "26101204",
+         "26101209", "26101210", "26101215", "26101216", "26101218",
+         "26101220", "26101221", "26101222", "26101225", "26101227",
+         "26101228", "26101229", "26101231", "26101234", "26101235",
+         "26101236", "26101242", "26101243", "26101245", "26101248",
+         "26101251", "26101252", "26101255", "26101259", "26101262",
+         "26101263", "26101264", "26101265", "26101267", "26101272",
+         "26101273", "26101274", "26101275", "26101278", "26101281",
+         "26101282", "26101283", "26101285", "26101287", "26101288",
+         "26101289", "26101290", "26101294", "26101295", "26101296",
+         "26101300", "26101301", "26101303", "26101304", "26101305",
+     ]
 
-# }
+}
 # Flat list of active corridor zone IDs:
-# CORRIDOR_ZONE_IDS = [z for zone_list in PROJECT_ZONES.values() for z in zone_list]
+CORRIDOR_ZONE_IDS = [z for zone_list in PROJECT_ZONES.values() for z in zone_list]"""
 # -----------------------------------------------------------------------------
 
 # Optional route coverage, including trips with endpoints outside the corridor.
