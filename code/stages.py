@@ -224,7 +224,7 @@ PACKAGES = {
             # "construction_co2_tonnes": 0.0,  # Add a project-specific total when available.
         },
     },
-""""
+
     # --- Tunnel package ---
     # Core Tunnel & Winterthur Hub Package (A0 Gesamt, A1 Winterthur, A2 Tunnel)
     #
@@ -246,6 +246,7 @@ PACKAGES = {
     #       Saves 4 minutes on covered routes and raises the comfort threshold by 15%.
     #       Provides 17-minute service and the Winterthur hub improvements;
     #       both packages together provide 15-minute service.
+    
     "tunnel": {
         "name": "Stage 2 - Tunnel & Winterthur Hub only",
 
@@ -282,7 +283,9 @@ PACKAGES = {
             "construction_co2_tonnes": 300_000.0,  # Total construction emissions (tonnes CO2e).
         },
     },
-}""""
+    
+}
+
 
 # =============================================================================
 # 2. COMBINED-ONLY BENEFITS
