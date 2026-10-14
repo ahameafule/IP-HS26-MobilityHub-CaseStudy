@@ -37,9 +37,9 @@ import pandas as pd
 # Default Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_CORRIDOR_BUFFER_M = 500.0
-DEFAULT_MAX_GATES = 40
-DEFAULT_GATE_SEPARATION_M = 500.0
+DEFAULT_CORRIDOR_BUFFER_M = 50
+DEFAULT_MAX_GATES = 25
+DEFAULT_GATE_SEPARATION_M = 200
 DEFAULT_PASSTHROUGH_FRACTION = 0.05
 
 # ---------------------------------------------------------------------------
@@ -5359,10 +5359,10 @@ def municipality_od_explorer(context: TransportContext, municipalities: list[str
     return render(context, municipalities, matrix=matrix, height=height)
 
 
-def municipality_flow_map_explorer(context: TransportContext, municipalities: list[str] | tuple[str, ...] | set[str], *, matrix: pd.DataFrame | None=None, n_bins: int=5, trip_bin_edges: list[float] | None=None, min_trips: float=0.0, max_flows: int=150, height: int=700) -> Any:
+def municipality_flow_map_explorer(context: TransportContext, municipalities: list[str] | tuple[str, ...] | set[str], *, matrix: pd.DataFrame | None=None, zone_ids: Sequence[str] | set[str] | None=None, n_bins: int=5, trip_bin_edges: list[float] | None=None, min_trips: float=0.0, max_flows: int=150, height: int=700) -> Any:
     """See additional.transport_display.municipality_flow_map_explorer."""
     from additional.transport_display import municipality_flow_map_explorer as render
-    return render(context, municipalities, matrix=matrix, n_bins=n_bins, trip_bin_edges=trip_bin_edges, min_trips=min_trips, max_flows=max_flows, height=height)
+    return render(context, municipalities, matrix=matrix, zone_ids=zone_ids, n_bins=n_bins, trip_bin_edges=trip_bin_edges, min_trips=min_trips, max_flows=max_flows, height=height)
 
 
 def flow_map_explorer(context: TransportContext, mode_result: ModeChoiceResult | None=None, corridor_municipalities: list[str] | None=None, *, matrix: pd.DataFrame | None=None, buffer_m: float=DEFAULT_CORRIDOR_BUFFER_M, n_bins: int=5, max_flows: int=250, pass_through_factor: float=0.05, min_trips: float=0.0) -> Any:
