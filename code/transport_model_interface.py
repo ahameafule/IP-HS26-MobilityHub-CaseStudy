@@ -415,7 +415,7 @@ def configured_detailed_network_path(
         return target.resolve()
 
     for relative in (
-        "data/processed/detailed_network.pkl",
+        "data/processed/forch_detailed_network.pkl",
         "data/processed/mehrspur_detailed_network.pkl",
     ):
         candidate = root / relative
