@@ -622,6 +622,40 @@ def _plotly_zone_boundary_trace(
     )
 
 
+def _plotly_zone_fill_traces(
+    boundaries: Any,
+    *,
+    fillcolor: str = "rgba(35,120,180,0.22)",
+    line_color: str = "rgba(35,90,140,0.8)",
+    name: str = "Selected zones",
+) -> list[Any]:
+    """Build filled Plotly map traces for selected zone polygons."""
+
+    if boundaries is None or len(boundaries) == 0:
+        return []
+    import plotly.graph_objects as go
+
+    traces = []
+    for geometry in boundaries.geometry:
+        polygons = list(geometry.geoms) if hasattr(geometry, "geoms") else [geometry]
+        for polygon in polygons:
+            if not hasattr(polygon, "exterior"):
+                continue
+            x, y = polygon.exterior.xy
+            traces.append(go.Scattermap(
+                lon=list(map(float, x)),
+                lat=list(map(float, y)),
+                mode="lines",
+                fill="toself",
+                fillcolor=fillcolor,
+                line={"color": line_color, "width": 1},
+                hoverinfo="skip",
+                name=name,
+                showlegend=not traces,
+            ))
+    return traces
+
+
 def _lonboard_map(
     layers: list[Any],
     *,
@@ -2068,6 +2102,7 @@ def municipality_flow_map_explorer(
     municipalities: list[str] | tuple[str, ...] | set[str],
     *,
     matrix: pd.DataFrame | None = None,
+    zone_ids: Sequence[str] | set[str] | None = None,
     n_bins: int = 5,
     trip_bin_edges: list[float] | None = None,
     min_trips: float = 0.0,
@@ -2084,8 +2119,60 @@ def municipality_flow_map_explorer(
     import geopandas as gpd
     import plotly.graph_objects as go
 
+    requested = list(dict.fromkeys(map(str, municipalities)))
+    if not requested:
+        raise ValueError("At least one municipality must be supplied.")
+
+    zone_data = context.zones
+    required_columns = {"grid_id", "municipality_name", "geometry"}
+    missing_columns = required_columns.difference(zone_data.columns)
+    if missing_columns:
+        raise ValueError(f"Zone data are missing columns: {sorted(missing_columns)}")
+    if zone_data.crs is None:
+        raise ValueError("Zone geometries need a declared CRS.")
+
+    if zone_ids is None:
+        selected_zones = zone_data.loc[
+            zone_data["municipality_name"].astype(str).isin(requested)
+        ].copy()
+        selected_zone_ids = selected_zones["grid_id"].astype(str).tolist()
+    else:
+        selected_zone_ids = list(dict.fromkeys(map(str, zone_ids)))
+        if not selected_zone_ids:
+            raise ValueError("At least one zone ID must be supplied.")
+        known_zone_ids = zone_data["grid_id"].astype(str)
+        unknown_zone_ids = set(selected_zone_ids).difference(known_zone_ids)
+        if unknown_zone_ids:
+            raise ValueError(f"Unknown zone IDs: {sorted(unknown_zone_ids)}")
+        selected_zones = zone_data.loc[
+            known_zone_ids.isin(selected_zone_ids)
+        ].copy()
+
+        selected_municipalities = selected_zones["municipality_name"].astype(str).unique()
+        requested = [
+            name for name in requested if name in selected_municipalities
+        ] + [
+            name for name in selected_municipalities if name not in requested
+        ]
+
+        source = context.baseline_od if matrix is None else matrix
+        source = source.copy()
+        source.index = source.index.astype(str)
+        source.columns = source.columns.astype(str)
+        missing_labels = set(selected_zone_ids).difference(source.index).union(
+            set(selected_zone_ids).difference(source.columns)
+        )
+        if missing_labels:
+            raise ValueError(
+                f"The OD matrix is missing selected zone IDs: {sorted(missing_labels)}"
+            )
+        matrix = source.loc[selected_zone_ids, selected_zone_ids]
+
+    if selected_zones.empty:
+        raise ValueError("No zones matched the selected municipalities or zone IDs.")
+
     _, links = tmi.aggregate_od_by_municipality(
-        context, municipalities, matrix=matrix
+        context, requested, matrix=matrix
     )
     links = links.loc[
         links["peak-hour passenger trips"] > float(min_trips)
@@ -2093,18 +2180,15 @@ def municipality_flow_map_explorer(
     if links.empty:
         raise ValueError("No municipality OD flows exceed min_trips.")
 
-    requested = list(dict.fromkeys(map(str, municipalities)))
-    zones = context.zones.loc[
-        context.zones["municipality_name"].astype(str).isin(requested),
-        ["municipality_name", "geometry"],
-    ].copy()
-    if zones.crs is None:
-        raise ValueError("Zone geometries need a declared CRS.")
-    zones["municipality_name"] = zones["municipality_name"].astype(str)
-    municipality_shapes = zones.dissolve(by="municipality_name")
+    selected_zones = selected_zones.dropna(subset=["geometry"])
+    selected_zones = selected_zones.loc[~selected_zones.geometry.is_empty].copy()
+    if selected_zones.empty:
+        raise ValueError("The selected zones have no usable polygon geometries.")
+    selected_zones["municipality_name"] = selected_zones["municipality_name"].astype(str)
+    municipality_shapes = selected_zones.dissolve(by="municipality_name")
     centres_projected = municipality_shapes.geometry.centroid
     centres_wgs84 = gpd.GeoSeries(
-        centres_projected, index=municipality_shapes.index, crs=zones.crs
+        centres_projected, index=municipality_shapes.index, crs=selected_zones.crs
     ).to_crs(4326)
     coordinates = {
         str(name): (float(point.x), float(point.y))
@@ -2114,6 +2198,8 @@ def municipality_flow_map_explorer(
         links["origin"].isin(coordinates)
         & links["destination"].isin(coordinates)
     ].copy()
+    if links.empty:
+        raise ValueError("No municipality OD flows have usable selected-zone geometries.")
     # A valid attribute name keeps ``itertuples`` access independent of how
     # pandas sanitises the human-readable column containing spaces and hyphens.
     links["value"] = links["peak-hour passenger trips"].astype(float)
@@ -2140,9 +2226,13 @@ def municipality_flow_map_explorer(
         }
     else:
         requested_bins = max(1, min(int(n_bins), len(links)))
-        links["bin"] = pd.qcut(
+        quantile_bins = pd.qcut(
             values, q=requested_bins, labels=False, duplicates="drop"
-        ).astype(int)
+        )
+        if quantile_bins.isna().any():
+            links["bin"] = 0
+        else:
+            links["bin"] = quantile_bins.astype(int)
         bin_labels = {}
         for index in sorted(links["bin"].unique()):
             bin_values = links.loc[
@@ -2170,11 +2260,15 @@ def municipality_flow_map_explorer(
     )
 
     figure = go.Figure()
-    boundary_trace = _plotly_zone_boundary_trace(
-        _prepare_zone_boundaries(zones, level="Municipality"),
-        visible="legendonly",
-        name="Municipality boundaries",
+    zone_boundaries = _prepare_zone_boundaries(
+        selected_zones, zone_ids=selected_zone_ids, level="FSM zone"
     )
+    fill_traces = _plotly_zone_fill_traces(zone_boundaries)
+    boundary_trace = _plotly_zone_boundary_trace(
+        zone_boundaries, visible=True, name="Selected zone boundaries"
+    )
+    for fill_trace in fill_traces:
+        figure.add_trace(fill_trace)
     if boundary_trace is not None:
         figure.add_trace(boundary_trace)
     arrow_lon, arrow_lat, arrow_angle, arrow_colour, arrow_size = [], [], [], [], []
@@ -2228,7 +2322,7 @@ def municipality_flow_map_explorer(
         ))
     figure.update_layout(
         title=(
-            "Cantonal-reference municipality OD desire lines "
+            "Selected-zone municipality OD desire lines "
             f"(showing {len(links)} flows)"
         ),
         map={

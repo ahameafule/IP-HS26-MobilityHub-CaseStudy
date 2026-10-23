@@ -55,7 +55,7 @@ NOMINAL_PARAMS = {
     # "BIKE_ASC_SHIFT_Y40": 0.20,  # Optional nominal final cycling preference shift (utility units).
     "EBIKE_SHARE": 0.25,  # Baseline e-bike fraction of cycling and PT bicycle access/egress trips (0 to 1).
     "EBIKE_SHARE_Y40": 0.50,  # Nominal final e-bike share.
-    "EBIKE_SPEED_MULTIPLIER": 1.5,  # E-bike speed divided by conventional-bike speed; 1.5 means 50% faster.
+    "EBIKE_SPEED_MULTIPLIER": 1.05,  # E-bike speed divided by conventional-bike speed; 1.05 means 5% faster.
     "ROAD_FREIGHT_GROWTH": 0.0,  # Growth in prepared commercial/freight vehicles and their synthetic uplift.
     "ROAD_FREIGHT_GROWTH_Y40": 0.10,  # Nominal final growth of prepared background road vehicles.
 
@@ -78,7 +78,7 @@ NOMINAL_PARAMS = {
     # -------------------------------------------------------------------------
     # PT service, section comfort capacity and train supply
     # -------------------------------------------------------------------------
-    "PT_HEADWAY_BASELINE": 20.0,  # Baseline interval between PT services (minutes).
+    "PT_HEADWAY_BASELINE": 15.0,  # Baseline interval between PT services (minutes).
     # Package headway reductions and capacity increases are configured in stages.py.
     # Section comfort thresholds (persons/peak hour).
     # Adopted 120,000-passenger daily count * PT peak share; thresholds do not grow with demand.
@@ -173,25 +173,25 @@ globals().update(NOMINAL_PARAMS)
 # -----------------------------------------------------------------------------
 # OPTION A: Define by Municipalities / Regions (Empty when in "zones" mode)
 # -----------------------------------------------------------------------------
-""" CORRIDOR_REGIONS = {  # Named municipality groups defining the modeled corridor.
-    "Zürich": ["Zürich"],
-    "Winterthur": ["Winterthur"],
-    "Airport / Glattal": [
-        "Kloten", "Opfikon", "Wallisellen", "Dübendorf",
-        "Dietlikon", "Wangen-Brüttisellen", "Bassersdorf", "Rümlang",
-        "Illnau-Effretikon", "Lindau", "Nürensdorf"
-    ],
-    "Eastern Switzerland (Gateways)": [
-        "Wiesendangen", "Elsau",
-        "Elgg", "Hagenbuch"
-    ]
-} """
 
-CORRIDOR_REGIONS = {
-    "Mobility-Hub": ["Küsnacht (ZH)", "Maur"],
-    "Zürich": ["Zürich", "Zumikon", "Zollikon"],
-    "Glatttal": ["Fällanden", "Schwerzenbach","Dübendorf","Volketswil"],
-    "Oberland": ["Uster", "Egg", "Mönchaltorf", "Wetzikon (ZH)"],}
+CORRIDOR_REGIONS = { }
+"""
+ # Named municipality groups defining the modeled corridor.
+=======
+CORRIDOR_REGIONS = {  # Named municipality groups defining the modeled corridor.
+
+    "Zürich": ["Zürich"],
+    "Bezirk Uster": [ "Dübendorf", "Fällanden",
+        "Schwerzenbach","Egg"
+    ],
+    "Maur": ["Maur"],
+    "Zürich-See": [
+        "Zollikon",
+        "Küsnacht (ZH)", "Zumikon"
+    ]
+
+}
+"""
 
 # Flat list of all corridor municipalities
 CORRIDOR_MUNICIPALITIES = [  # Derived flat list used by corridor selection and stage definitions.
@@ -201,36 +201,41 @@ CORRIDOR_MUNICIPALITIES = [  # Derived flat list used by corridor selection and 
 # Optional project-relative or absolute detailed road-network cache path.
 # Notebook 02 prepares a missing cache; later notebooks require it to exist.
 # None uses the existing default cache. For a new project, select a new filename.
-DETAILED_NETWORK_FILE = "data/processed/mobility_hub_detailed_network.pkl"
+
+DETAILED_NETWORK_FILE = "data/processed/forch_detailed_network.pkl"  # Example: "data/processed/my_project_detailed_network.pkl"
+
+
 
 # -----------------------------------------------------------------------------
 # OPTION B: Define by Explicit Zone IDs
 # -----------------------------------------------------------------------------
 # Example: enable zone selection, define groups, then flatten their IDs.
-"""CORRIDOR_DEFINITION_MODE = "zones"
+CORRIDOR_DEFINITION_MODE = "zones"
 PROJECT_ZONES = {
-     # 1. Zürich Eastern Alignment into CBD: Bellevue, Stadelhofen, Kreuzplatz, Römerhof,
-     #    Hegibachplatz, Burgwies, Balgrist, Rehalp (S18 border loop), and Witikon
-     "Zurich_S18_Alignment": [
-         "26101165", "26101169", "26101171", "26101173", "26101174",
-         "26101180", "26101181", "26101183", "26101185", "26101187",
-         "26101189", "26101190", "26101194", "26101195", "26101198",
-         "26101199", "26101201", "26101202", "26101203", "26101204",
-         "26101209", "26101210", "26101215", "26101216", "26101218",
-         "26101220", "26101221", "26101222", "26101225", "26101227",
-         "26101228", "26101229", "26101231", "26101234", "26101235",
-         "26101236", "26101242", "26101243", "26101245", "26101248",
-         "26101251", "26101252", "26101255", "26101259", "26101262",
-         "26101263", "26101264", "26101265", "26101267", "26101272",
-         "26101273", "26101274", "26101275", "26101278", "26101281",
-         "26101282", "26101283", "26101285", "26101287", "26101288",
-         "26101289", "26101290", "26101294", "26101295", "26101296",
-         "26101300", "26101301", "26101303", "26101304", "26101305",
-     ]
-
-}
+   # 1. Zürich Eastern Alignment into CBD: Bellevue, Stadelhofen, Kreuzplatz, Römerhof,
+    #    Hegibachplatz, Burgwies, Balgrist, Rehalp (S18 border loop), and Witikon
+    "Zurich_S18_Alignment": [
+        "26101216", "26101218",
+        "26101220", "26101221", "26101222", "26101227",
+        "26101229",  "26101234", "26101235",
+        "26101236", "26101242", "26101243", "26101245", "26101248",
+        "26101251", "26101252", "26101255", "26101259", "26101262",
+        "26101263", "26101264", "26101265", "26101267", "26101272",
+        "26101273", "26101274", "26101275", "26101278", "26101281",
+        "26101282", "26101283", "26101285", "26101287", "26101288",
+        "26101289", "26101290", "26101294", "26101295", "26101296",
+        "26101300", "26101301", "26101303", "26101304", "26101305",
+        "26101270"
+    ],
+    "Zollikon": ["16101006", "16101007", "16101008", "16101009"],
+    "Zumikon": ["16001001", "16001002", "16001003", "16001004"],
+    "Küsnacht (ZH)": ["15401012"],
+    "Maur": ["19501001","19501002","19501004", "19501005", "19501006"],
+    "Egg": ["19201001", "19201002", "19201003", "19201004", "19201005"],
+    "Fällanden":["19301001"]
+     }
 # Flat list of active corridor zone IDs:
-CORRIDOR_ZONE_IDS = [z for zone_list in PROJECT_ZONES.values() for z in zone_list]"""
+CORRIDOR_ZONE_IDS = [z for zone_list in PROJECT_ZONES.values() for z in zone_list]
 # -----------------------------------------------------------------------------
 
 # Optional route coverage, including trips with endpoints outside the corridor.
@@ -247,9 +252,9 @@ SECTION_DEFAULTS = {  # Generic fallback settings; configure the project's SECTI
     "coverage_file": None,                # None uses an automatically regenerated cache.
     "crowding_enabled": False,            # this version values crowding only for PT
 }
-SECTION = {  # Active project section and endpoints used for its travel-time reference.
+"""SECTION = {  # Active project section and endpoints used for its travel-time reference.
     **SECTION_DEFAULTS,
-    "active": True,                       # Include this count and its effects in model/appraisal outputs.
+    "active": False,                       # Include this count and its effects in model/appraisal outputs.
     "kind": "pt_approach",                # PT station approach, cycling route or individual PT stop.
     "station": "Winterthur",              # Station whose approach is counted.
     "towards": "Effretikon",              # Select the side facing this station, including express services.
@@ -258,14 +263,14 @@ SECTION = {  # Active project section and endpoints used for its travel-time ref
     "origin": {"municipality_name": "Zürich"},  # Origin of the modeled travel-time reference.
     "destination": {"municipality_name": "Winterthur"},  # Destination of that reference.
     "crowding_enabled": True,             # Value extra PT discomfort using the section comfort threshold.
-}
+}"""
 
 # Alternative definitions (replace SECTION above; disable PT crowding for these).
 # Disable EXTERNAL_FLOW below, or calibrate a new cohort of the matching mode:
 # SECTION = {"active": True, "kind": "bike_route", "mode": "BIKE",
 #            "origin_station": "Wallisellen", "destination_station": "Dübendorf"}
 # A route reports its midpoint-link count and unique users of any project link.
-# SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": "Wallisellen"}
+SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": "Parent8503065"}
 # A stop reports access, egress and represented walking transfers separately.
 # Same-platform train changes cannot all be identified from the routing inputs.
 
@@ -282,7 +287,7 @@ EXTERNAL_FLOW_DEFAULTS = {  # Generic fallback; configure the project's EXTERNAL
 }
 EXTERNAL_FLOW = {  # One cohort shared by baseline and projects, added after mode choice.
     **EXTERNAL_FLOW_DEFAULTS,
-    "enabled": True,                      # Include this cohort's time costs and PT comfort loading.
+    "enabled": False,                      # Include this cohort's time costs and PT comfort loading.
     "mode": "PT",                         # Existing PT passengers; must match SECTION.mode.
     # One-time nominal Stage-0 calibration (25% e-bikes; 2% road-gap target):
     # 120,000 target - 66,891.950467 modeled passengers/day, both directions.

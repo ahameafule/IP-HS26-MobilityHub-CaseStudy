@@ -1,7 +1,7 @@
 """
 stages.py
 =========
-Infrastructure stage specifications for the SBB MehrSpur Zürich–Winterthur project.
+Infrastructure stage specifications for the Mobility Hub project in Forch.
 
 A 'stage' captures the physical infrastructure and operational interventions
 that modify the multimodal transport network and skims in the Canton Zürich FSM model.
@@ -19,7 +19,7 @@ Asset lifetimes below affect final-year appraisal only, not transport.
 SURROGATE CONSEQUENCE
 ---------------------
 The two packages can operate independently. Transport states are 0 (baseline),
-1 (stations), 2 (tunnel), and 3 (both). The combined state contains the two
+1 (station with some Band Ride), 2 (Bike and Ride), and 3 (both). The combined state contains the two
 packages' benefits once each plus COMBINED_EFFECTS. One GP learns all four configurations. Changes
 to their physical effects require rebuilding the surrogate and response table.
 Changing only plan timing, costs, comfort capacity, construction emissions or
@@ -171,7 +171,7 @@ PACKAGES = {
 
 
     "stations": {
-        "name": "Stage 1 – Local Stations & Access Package",
+        "name": "Stage 1 – Traditional plan",
 
         # Railway improvements
         # Section minutes follow parameters.SECTION route coverage, including
@@ -179,28 +179,31 @@ PACKAGES = {
         # between different CORRIDOR_MUNICIPALITIES, in both directions.
         "railway_expansions": [
             {
-                "section_time_saving_min": 1.0,  # In-vehicle minutes saved relative to baseline.
-                "headway_reduction_min": 1.0,  # Minutes removed from the baseline service interval.
-                "capacity_increase": 0.10,  # Fraction of baseline peak-hour comfort capacity (+10%).
+                "headway_reduction_min": 0.0,  # Minutes removed from the baseline service interval.
+                "capacity_increase": 0.00,  # Fraction of baseline peak-hour comfort capacity (+10%).
             },
         ],
 
         # Hub & Node Interventions
         "mobility_hubs": [
+            # A) Station-level: users of Forch station itself
             {
-                "name": "Station Upgrades (Dietlikon, Bassersdorf, Wallisellen)",
-                "zones": [
-                    {"municipality_name": "Dietlikon"},
-                    {"municipality_name": "Bassersdorf"},
-                    {"municipality_name": "Wallisellen"}
-                ],
+                "name": "Forch Station Upgrade",
+                "station": "Forch",
                 "effects": {
-                    "access_time_reduction_pct": 25.0,  # Improved pedestrian ramps & bus loop access
-                    "transfer_time_reduction_pct": 15.0, # Shorter platform transfer paths
-                    # Frequency savings belong to the railway package only.
+                    "access_time_reduction_pct": 20.0,
                     "egress_time_reduction_pct": 20.0,
-                }
-            }
+                },
+            },
+            # B) Zone-level: catchment zones around Forch
+            {
+                "name": "Forch Catchment Access",
+                "zones": ["19501005", "15401012",	"19501004"],   # prefer IDs over municipality names
+                "effects": {
+                    "access_time_reduction_pct": 10.0,
+                    "egress_time_reduction_pct": 10.0,
+                },
+            },
         ],
 
         # Appraisal considerations
@@ -211,7 +214,7 @@ PACKAGES = {
         # Set capital_share to 0 to disable residual valuation (lifetime may then be None).
         # No asset replacement is assumed.
         "appraisal": {
-            "capital_cost_chf": 925_000_000,  # Station-package CAPEX (CHF).
+            "capital_cost_chf": 15_000_000,  # Station-package CAPEX (CHF).
             "lifetime_years": 80,  # Service life of the share valued below (years).
             "capital_share": 0.60,  # Fraction of actual capital paid eligible for residual value.
             # Total construction emissions (tonnes CO2e), spread over construction years.
@@ -241,43 +244,51 @@ PACKAGES = {
     #       Saves 4 minutes on covered routes and raises the comfort threshold by 15%.
     #       Provides 17-minute service and the Winterthur hub improvements;
     #       both packages together provide 15-minute service.
+    
     "tunnel": {
-        "name": "Stage 2 - Tunnel & Winterthur Hub only",
+        "name": "Stage 2 - 2nd Bus line & additional bike racks",
 
         # Railway improvements: the same section and service OD scope as above.
         "railway_expansions": [
             {
-                "section_time_saving_min": 4.0,  # In-vehicle minutes saved relative to baseline.
-                "headway_reduction_min": 3.0,  # Minutes removed from the baseline service interval.
-                "capacity_increase": 0.15,  # Fraction of baseline peak-hour comfort capacity (+15%).
+                "headway_reduction_min": 0.0,  # Minutes removed from the baseline service interval.
+                "capacity_increase": 0.0,  # Fraction of baseline peak-hour comfort capacity (+15%).
+                "transfer_wait_reduction_pct": 50.0
             },
         ],
 
         # Hub & Node Interventions
         "mobility_hubs": [
+            # A) Station-level: users of Forch station itself
             {
-                "name": "Winterthur Multimodal Hub (A1)",
-                "zones": [
-                    {"municipality_name": "Winterthur"}
-                ],
+                "name": "Forch Station Upgrade Part 2",
+                "station": "Forch",
                 "effects": {
-                    "access_time_reduction_pct": 25.0,
-                    "transfer_time_reduction_pct": 15.0, # Optimized platform connections at Winterthur HB
-                    # Frequency savings belong to the railway package only.
-                    "egress_time_reduction_pct": 20.0,
-                }
-            }
+                    "access_time_reduction_pct": 10.0,
+                    "egress_time_reduction_pct": 10.0,
+                },
+            },
+            # B) Zone-level: catchment zones around Forch
+            {
+                "name": "Forch Catchment Access",
+                "zones": ["19501005", "	15401012",	"19501004"],   # prefer IDs over municipality names
+                "effects": {
+                    "access_time_reduction_pct": 10.0,
+                    "egress_time_reduction_pct": 10.0,
+                },
+            },
         ],
 
         # Appraisal considerations: the same valuation and construction conventions.
         "appraisal": {
-            "capital_cost_chf": 2_302_600_000,  # Tunnel/Winterthur package CAPEX (CHF).
+            "capital_cost_chf": 2_000_000,  # Tunnel/Winterthur package CAPEX (CHF).
             "lifetime_years": 80,  # Service life of the share valued below (years).
             "capital_share": 0.60,  # Fraction of actual capital paid eligible for residual value.
-            "construction_co2_tonnes": 300_000.0,  # Total construction emissions (tonnes CO2e).
         },
     },
+    
 }
+
 
 # =============================================================================
 # 2. COMBINED-ONLY BENEFITS
@@ -288,9 +299,9 @@ PACKAGES = {
 COMBINED_EFFECTS = {
     "railway_expansions": [
         {
-            "section_time_saving_min": 1.0,
-            "headway_reduction_min": 1.0,
-            "capacity_increase": 0.05,  # Extra fraction of baseline capacity, only when both packages operate.
+            "section_time_saving_min": 0.0,
+            "headway_reduction_min": 0.0,
+            "capacity_increase": 0.00,  # Extra fraction of baseline capacity, only when both packages operate.
         },
     ],
     # Capacity increases are additive: +10% stations +15% tunnel +5% combined = +30% of baseline.
