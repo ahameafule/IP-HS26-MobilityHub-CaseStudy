@@ -252,7 +252,7 @@ SECTION_DEFAULTS = {  # Generic fallback settings; configure the project's SECTI
     "coverage_file": None,                # None uses an automatically regenerated cache.
     "crowding_enabled": False,            # this version values crowding only for PT
 }
-SECTION = {  # Active project section and endpoints used for its travel-time reference.
+"""SECTION = {  # Active project section and endpoints used for its travel-time reference.
     **SECTION_DEFAULTS,
     "active": False,                       # Include this count and its effects in model/appraisal outputs.
     "kind": "pt_approach",                # PT station approach, cycling route or individual PT stop.
@@ -263,14 +263,14 @@ SECTION = {  # Active project section and endpoints used for its travel-time ref
     "origin": {"municipality_name": "Zürich"},  # Origin of the modeled travel-time reference.
     "destination": {"municipality_name": "Winterthur"},  # Destination of that reference.
     "crowding_enabled": True,             # Value extra PT discomfort using the section comfort threshold.
-}
+}"""
 
 # Alternative definitions (replace SECTION above; disable PT crowding for these).
 # Disable EXTERNAL_FLOW below, or calibrate a new cohort of the matching mode:
 # SECTION = {"active": True, "kind": "bike_route", "mode": "BIKE",
 #            "origin_station": "Wallisellen", "destination_station": "Dübendorf"}
 # A route reports its midpoint-link count and unique users of any project link.
-# SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": "Wallisellen"}
+SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": "Parent8503065"}
 # A stop reports access, egress and represented walking transfers separately.
 # Same-platform train changes cannot all be identified from the routing inputs.
 

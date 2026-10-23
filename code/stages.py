@@ -171,7 +171,7 @@ PACKAGES = {
 
 
     "stations": {
-        "name": "Stage 1 – Local Stations & Access Package",
+        "name": "Stage 1 – Traditional plan",
 
         # Railway improvements
         # Section minutes follow parameters.SECTION route coverage, including
@@ -192,14 +192,13 @@ PACKAGES = {
                 "station": "Forch",
                 "effects": {
                     "access_time_reduction_pct": 20.0,
-                    "egress_time_reduction_pct": 15.0,
-                    "transfer_time_reduction_pct": 0.05, 
+                    "egress_time_reduction_pct": 20.0,
                 },
             },
             # B) Zone-level: catchment zones around Forch
             {
                 "name": "Forch Catchment Access",
-                "zones": ["19501005", "	15401012",	"19501004"],   # prefer IDs over municipality names
+                "zones": ["19501005", "15401012",	"19501004"],   # prefer IDs over municipality names
                 "effects": {
                     "access_time_reduction_pct": 10.0,
                     "egress_time_reduction_pct": 10.0,
@@ -254,6 +253,7 @@ PACKAGES = {
             {
                 "headway_reduction_min": 0.0,  # Minutes removed from the baseline service interval.
                 "capacity_increase": 0.0,  # Fraction of baseline peak-hour comfort capacity (+15%).
+                "transfer_wait_reduction_pct": 50.0
             },
         ],
 
@@ -266,7 +266,6 @@ PACKAGES = {
                 "effects": {
                     "access_time_reduction_pct": 10.0,
                     "egress_time_reduction_pct": 10.0,
-                    "transfer_time_reduction_pct": 0.05, 
                 },
             },
             # B) Zone-level: catchment zones around Forch
