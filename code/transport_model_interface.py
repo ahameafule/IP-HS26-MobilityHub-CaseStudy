@@ -37,9 +37,9 @@ import pandas as pd
 # Default Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_CORRIDOR_BUFFER_M = 50
-DEFAULT_MAX_GATES = 25
-DEFAULT_GATE_SEPARATION_M = 200
+DEFAULT_CORRIDOR_BUFFER_M = 500.0
+DEFAULT_MAX_GATES = 100
+DEFAULT_GATE_SEPARATION_M = 500.0
 DEFAULT_PASSTHROUGH_FRACTION = 0.05
 
 # ---------------------------------------------------------------------------
@@ -415,7 +415,7 @@ def configured_detailed_network_path(
         return target.resolve()
 
     for relative in (
-        "data/processed/forch_detailed_network.pkl",
+        "data/processed/detailed_network.pkl",
         "data/processed/mehrspur_detailed_network.pkl",
     ):
         candidate = root / relative

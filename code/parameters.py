@@ -52,7 +52,7 @@ NOMINAL_PARAMS = {
     "PT_ASC_SHIFT": 0.0,  # Additive preference shift for both PT access modes (utility units, not percent).
     "PT_ASC_SHIFT_Y40": 0.10,  # Nominal final PT preference shift (utility units).
     "BIKE_ASC_SHIFT": 0.0,  # Additive preference shift for standalone cycling (utility units).
-    # "BIKE_ASC_SHIFT_Y40": 0.20,  # Optional nominal final cycling preference shift (utility units).
+    "BIKE_ASC_SHIFT_Y40": 0.20,  # Optional nominal final cycling preference shift (utility units).
     "EBIKE_SHARE": 0.25,  # Baseline e-bike fraction of cycling and PT bicycle access/egress trips (0 to 1).
     "EBIKE_SHARE_Y40": 0.50,  # Nominal final e-bike share.
     "EBIKE_SPEED_MULTIPLIER": 1.05,  # E-bike speed divided by conventional-bike speed; 1.05 means 5% faster.
@@ -85,7 +85,7 @@ NOMINAL_PARAMS = {
     "PT_CAPACITY_BASELINE": 11_352.0,  # Fixed baseline section comfort threshold (persons/peak hour).
     "CROWDING_SLOPE": 2.0,  # Extra time-penalty slope above Q/C = 1 in min(CROWDING_MAX, 1 + slope*max(Q/C-1, 0)).
     "CROWDING_MAX": 3.0,  # Maximum total multiplier on section in-vehicle time; only the excess over 1 is added.
-    "TRAIN_GROSS_TONNES": 375.0,  # Reference gross tonnes per train for rail external costs and energy consumption.
+    "TRAIN_GROSS_TONNES": 40.0,  # Reference gross tonnes per train for rail external costs and energy consumption.
     # Fixed Stage-0 peak-hour train supply, calibrated once from the nominal
     # Stage-0 model (512,188 passenger-km / 150 passengers per train). Keeping
     # it independent of ridership prevents mode shift from creating fictitious
@@ -95,14 +95,14 @@ NOMINAL_PARAMS = {
     # -------------------------------------------------------------------------
     # Values of passenger time (CHF/person-hour)
     # -------------------------------------------------------------------------
-    "C_TT_CAR": 42.54,  # Car travel-time value, including peak congestion delay (CHF/person-hour).
-    "C_TT_PT": 26.52,  # PT in-vehicle time value (CHF/person-hour).
-    "C_TT_PT_WAITING": 26.52,  # Initial and transfer waiting-time value (CHF/person-hour).
-    "C_TT_PT_ACCESS": 26.52,  # PT access and egress walking/cycling time value (CHF/person-hour).
-    "C_TT_PT_TRANSFER": 26.52,  # Physical transfer-walking time value (CHF/person-hour); excludes waiting.
+    "C_TT_CAR": 23.3,  # Car travel-time value, including peak congestion delay (CHF/person-hour).
+    "C_TT_PT": 14.4,  # PT in-vehicle time value (CHF/person-hour).
+    "C_TT_PT_WAITING": 21.1,  # Initial and transfer waiting-time value (CHF/person-hour).
+    "C_TT_PT_ACCESS": 21.1,  # PT access and egress walking/cycling time value (CHF/person-hour).
+    "C_TT_PT_TRANSFER": 21.1,  # Physical transfer-walking time value (CHF/person-hour); excludes waiting.
     # Active-mode time is valued per person-hour, like PT/car passenger time.
-        "C_TT_BIKE": 35.0,  # Cycling value of time (CHF/person-hour)
-    "C_TT_WALK": 16.0,  # Walking value of time (CHF/person-hour)
+    "C_TT_BIKE": 21.1,  # Cycling value of time (CHF/person-hour)
+    "C_TT_WALK": 26.7,  # Walking value of time (CHF/person-hour)
 
     # -------------------------------------------------------------------------
     # Optional additional benefits (uncomment to include in appraisal)
@@ -110,8 +110,8 @@ NOMINAL_PARAMS = {
     # Health rates apply to standalone cycling/walking person-km, including e-bikes.
     # The PT rate applies once per person-trip, including supplementary PT passengers.
     # Positive rates reduce societal costs; omitted rates default to zero.
-    # "BENEFIT_HEALTH_BIKE_PER_KM": 1.0,  # Cycling health benefit (CHF/person-km).
-    # "BENEFIT_HEALTH_WALK_PER_KM": 1.0,  # Walking health benefit (CHF/person-km).
+    "BENEFIT_HEALTH_BIKE_PER_KM": 1.31,  # Cycling health benefit (CHF/person-km).
+    "BENEFIT_HEALTH_WALK_PER_KM": 0.98,  # Walking health benefit (CHF/person-km).
     # "BENEFIT_SOCIOECONOMIC_PT_PER_TRIP": 1.0,  # Additional PT benefit (CHF/person-trip).
 
     # -------------------------------------------------------------------------
@@ -361,7 +361,7 @@ STRUCTURAL_UNCERTAINTIES = {  # Distributions for selected general parameters; n
         "use": "sensitivity",
         "transient": False,
         "distribution": "uniform",
-        "minimum": 19.89,
+        "minimum": 12.89,
         "maximum": 33.15,
     },
     "C_TT_CAR": {  # Car value-of-time sensitivity, including congestion time.
@@ -369,7 +369,7 @@ STRUCTURAL_UNCERTAINTIES = {  # Distributions for selected general parameters; n
         "use": "sensitivity",
         "transient": False,
         "distribution": "uniform",
-        "minimum": 31.91,
+        "minimum": 21.91,
         "maximum": 53.18,
     },
     "CO2_VALUE_CHF_PER_TONNE": {  # Draw the reference-year value once (constant 2019 CHF/tonne CO2).

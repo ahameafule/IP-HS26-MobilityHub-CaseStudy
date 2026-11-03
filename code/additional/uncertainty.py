@@ -174,7 +174,8 @@ def _distribution_value(u, spec, reference):
     else:
         low, high = float(spec["minimum"]), float(spec["maximum"])
         if not isfinite(low) or not isfinite(high) or not low <= reference <= high:
-            raise ValueError("The nominal endpoint must lie within finite distribution bounds.")
+            raise ValueError(f" nominal endpoint {reference} must lie within finite "
+        f"distribution bounds [{low}, {high}].")
         if high == low:
             value = float(_clip(low, spec))
             return int(value) if integer else value
