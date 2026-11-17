@@ -157,7 +157,7 @@ NOMINAL_PARAMS = {
     # -------------------------------------------------------------------------
     "MAX_AVG_TT": 15.0,  # Acceptability ceiling for peak car/PT in-vehicle time plus car delay (min/trip).
     "PT_SHARE_TARGET": 0.35,  # Teaching minimum for PT share of strategic passenger-km; baseline is about 31.9%.
-    "MIN_STRATEGIC_PKM_DISTANCE": 5.0,  # Minimum OD distance for strategic mode-share indicators (km); not an appraisal cutoff.
+    "MIN_STRATEGIC_PKM_DISTANCE": 2.0,  # Minimum OD distance for strategic mode-share indicators (km); not an appraisal cutoff.
 
     # Internal shared keys for appraisal and uncertainties; edit values in stages.py.
     **package_parameter_defaults(),
@@ -361,16 +361,16 @@ STRUCTURAL_UNCERTAINTIES = {  # Distributions for selected general parameters; n
         "use": "sensitivity",
         "transient": False,
         "distribution": "uniform",
-        "minimum": 12.89,
-        "maximum": 33.15,
+        "minimum": 10.80,
+        "maximum": 18.00,
     },
     "C_TT_CAR": {  # Car value-of-time sensitivity, including congestion time.
         "category": "post_modelling",
         "use": "sensitivity",
         "transient": False,
         "distribution": "uniform",
-        "minimum": 21.91,
-        "maximum": 53.18,
+        "minimum": 17.48,
+        "maximum": 29.13,
     },
     "CO2_VALUE_CHF_PER_TONNE": {  # Draw the reference-year value once (constant 2019 CHF/tonne CO2).
         # Triangular mode is the general reference value; the engine applies

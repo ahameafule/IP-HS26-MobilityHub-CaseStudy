@@ -189,7 +189,8 @@ PACKAGES = {
             # A) Station-level: users of Forch station itself
             {
                 "name": "Forch Station Upgrade",
-                "station": "Forch",
+                "zones": ["15401012"],
+                "stops_per_zone": 8,
                 "effects": {
                     "access_time_reduction_pct": 20.0,
                     "egress_time_reduction_pct": 20.0,
@@ -200,8 +201,8 @@ PACKAGES = {
                 "name": "Forch Catchment Access",
                 "zones": ["19501005", "15401012",	"19501004"],   # prefer IDs over municipality names
                 "effects": {
-                    "access_time_reduction_pct": 10.0,
-                    "egress_time_reduction_pct": 10.0,
+                    "access_time_reduction_pct": 20.0,
+                    "egress_time_reduction_pct": 20.0,
                 },
             },
         ],
@@ -253,8 +254,7 @@ PACKAGES = {
             {
                 "headway_reduction_min": 0.0,  # Minutes removed from the baseline service interval.
                 "capacity_increase": 0.0,  # Fraction of baseline peak-hour comfort capacity (+15%).
-                "transfer_wait_reduction_pct": 50.0
-            },
+            }
         ],
 
         # Hub & Node Interventions
@@ -262,7 +262,8 @@ PACKAGES = {
             # A) Station-level: users of Forch station itself
             {
                 "name": "Forch Station Upgrade Part 2",
-                "station": "Forch",
+                "zones": ["15401012"],
+                "stops_per_zone": 8,
                 "effects": {
                     "access_time_reduction_pct": 10.0,
                     "egress_time_reduction_pct": 10.0,
@@ -271,10 +272,10 @@ PACKAGES = {
             # B) Zone-level: catchment zones around Forch
             {
                 "name": "Forch Catchment Access",
-                "zones": ["19501005", "	15401012",	"19501004"],   # prefer IDs over municipality names
+                "zones": ["19501005", "15401012",	"19501004"],   # prefer IDs over municipality names
                 "effects": {
-                    "access_time_reduction_pct": 10.0,
-                    "egress_time_reduction_pct": 10.0,
+                    "access_time_reduction_pct": 20.0,
+                    "egress_time_reduction_pct": 20.0,
                 },
             },
         ],
