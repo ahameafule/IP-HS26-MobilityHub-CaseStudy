@@ -270,7 +270,7 @@ SECTION_DEFAULTS = {  # Generic fallback settings; configure the project's SECTI
 # SECTION = {"active": True, "kind": "bike_route", "mode": "BIKE",
 #            "origin_station": "Wallisellen", "destination_station": "Dübendorf"}
 # A route reports its midpoint-link count and unique users of any project link.
-SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": "Parent8503065"}
+SECTION = {"active": True, "kind": "pt_stop", "mode": "PT", "station": ["Forch", "Forch, Bahnhof", "Neue Forch"]}
 # A stop reports access, egress and represented walking transfers separately.
 # Same-platform train changes cannot all be identified from the routing inputs.
 

@@ -50,6 +50,21 @@ def _mode(value):
     return value
 
 
+def _station_selection(value, *, multiple=False):
+    """Validate a station selector; a PT-stop list denotes one combined hub."""
+    if isinstance(value, (list, tuple)):
+        if not multiple:
+            raise ValueError("Only pt_stop supports a list of adjoining station groups.")
+        if not value or any(not isinstance(item, str) or not item.strip() for item in value):
+            raise ValueError("A station list must contain nonempty station names or parent stop IDs.")
+        # A different order or repeated name must not create a different recipe.
+        return sorted({item.strip() for item in value})
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError("Supply a station name or parent stop ID; pt_stop also accepts a nonempty list.")
+    # Preserve existing scalar recipe/cache identities.
+    return value
+
+
 def section_config(params=None):
     """Resolve SECTION, or a direct section dictionary; generic default is off."""
     params = params or {}
@@ -77,10 +92,9 @@ def section_config(params=None):
         if bool(result.get("origin")) != bool(result.get("destination")):
             raise ValueError("Supply both reference origin and destination, or neither.")
         if kind in ("pt_approach", "pt_stop"):
-            if not str(result.get("station", "")).strip():
-                raise ValueError(f"SECTION {kind} needs a station name.")
-            if kind == "pt_approach" and not str(result.get("towards", "")).strip():
-                raise ValueError("SECTION pt_approach needs a towards station name.")
+            result["station"] = _station_selection(result.get("station"), multiple=kind == "pt_stop")
+            if kind == "pt_approach":
+                result["towards"] = _station_selection(result.get("towards"))
         if kind == "pt_stop" and result["crowding_enabled"]:
             raise ValueError("PT stop coverage measures access and transfers; disable corridor crowding for this kind.")
         if result["crowding_enabled"] and result["mode"] != "PT":
@@ -224,6 +238,14 @@ def _ensure_recipe_coverage(config, context=None):
 
 
 def _station_group(stops, graph, name):
+    if isinstance(name, (list, tuple)):
+        groups = [_station_group(stops, graph, item)
+                  for item in _station_selection(name, multiple=True)]
+        # Resolve each parent independently, then trace all platforms as one hub.
+        # Combining already-traced masks would miss transfers between groups.
+        nodes = set().union(*(nodes for nodes, _ in groups))
+        selected = pd.concat([selected for _, selected in groups]).drop_duplicates("stop_id")
+        return nodes, selected
     ids = stops.stop_id.astype(str)
     matched = stops.loc[stops.stop_name.map(_name).eq(_name(name)) | ids.eq(str(name))]
     if matched.empty:
@@ -439,11 +461,19 @@ def _prepare_recipe(context, config, target, contract):
                 components[mode][key] = mode + "_" + key
                 arrays[mode + "_" + key] = values[key]
     section_id = kind + "_" + _hash(contract)[:12]
-    entry = {"id": section_id, "name": config.get("station", kind), "mode": config["mode"],
+    station_name = config.get("station", kind)
+    if isinstance(station_name, (list, tuple)):
+        station_name = " + ".join(station_name)
+    station_names = []
+    for key in ("station", "towards", "origin_station", "destination_station"):
+        value = config.get(key)
+        if value:
+            station_names.extend(value if isinstance(value, (list, tuple)) else [value])
+    entry = {"id": section_id, "name": station_name, "mode": config["mode"],
         "kind": kind, "masks": keys, "components": components,
         "saving_weights": {mode: mode + "_saving_weight" for mode in traced},
         "both_directions": config["both_directions"],
-        "stations": [config[key] for key in ("station", "towards", "origin_station", "destination_station") if config.get(key)],
+        "stations": station_names,
         "route_input_signature": route_input_signature(context, config["mode"]),
         "description": {"pt_approach": "Fixed PT paths approaching the station from the selected side.",
             "pt_stop": "Unique access, egress or represented interior walking-transfer users.",
@@ -1123,10 +1153,11 @@ def prepare_section_coverage(context, config, output=None, *, section_id=None, r
         values = [station_override] if isinstance(station_override, str) else list(station_override)
         if config["kind"] == "pt_approach" and len(values) == 2:
             config.update(station=values[1], towards=values[0])
-        elif config["kind"] == "pt_stop" and len(values) == 1:
-            config["station"] = values[0]
+        elif config["kind"] == "pt_stop" and values:
+            config["station"] = values[0] if len(values) == 1 else values
         else:
-            raise ValueError("Use station/towards for a PT approach, station for a stop, or explicit cycling endpoints.")
+            raise ValueError("Use station/towards for a PT approach, station group(s) for a stop, or explicit cycling endpoints.")
+    config = section_config(config)
     if route_file is not None:
         config["route_file"] = str(route_file)
     if output is not None:
@@ -1152,7 +1183,7 @@ def main(argv=None):
     parser.add_argument("--destination-zones", nargs="+")
     parser.add_argument("--one-direction", action="store_true")
     parser.add_argument("--section", help="Registered section name for counting; --list-sections shows choices.")
-    parser.add_argument("--station", help="PT station name or parent stop ID.")
+    parser.add_argument("--station", nargs="+", help="PT station name or parent stop ID; pt_stop accepts multiple adjoining groups. Quote each name.")
     parser.add_argument("--towards", help="Station indicating the side of a PT approach.")
     parser.add_argument("--origin-station", help="Cycling route start, located using a station name.")
     parser.add_argument("--destination-station", help="Cycling route end, located using a station name.")
@@ -1192,6 +1223,8 @@ def main(argv=None):
     if args.section:
         config["kind"] = "screenline"
         config["section_override"] = args.section
+    if args.station and len(args.station) == 1:
+        args.station = args.station[0]
     for key in ("station", "towards", "origin_station", "destination_station", "origin_coordinates", "destination_coordinates"):
         if getattr(args, key) is not None:
             config[key] = getattr(args, key)
