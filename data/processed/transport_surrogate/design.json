@@ -11,7 +11,7 @@
     },
     "points_added": 0,
     "final_holdout_metrics": {
-      "weighted_rmse_min": 0.13368044308085156
+      "weighted_rmse_min": 0.13655704688648412
     },
     "target_reached": true
   },
@@ -1580,8 +1580,8 @@
   ],
   "cache_contract": {
     "format_version": 3,
-    "model_fingerprint": "6b2f2a495e8480f6f6be",
-    "reference_equations": "19783b770214fd1a0541",
+    "model_fingerprint": "f0ed2baa7bcf0da975ec",
+    "reference_equations": "e8e437c356eed35c1c86",
     "solver_settings": {
       "stopping_rule": "road_relative_gap",
       "min_iterations": 8,
@@ -1660,9 +1660,10 @@
     "code/additional/section_flows.py:_RECIPE_VERSION": "a786c4927daaeb9cae90979a0d5edd423485328b70b0b25c5776c14821ec49e4",
     "code/additional/section_flows.py:_read_coverage": "344b5482e12aef81ee6d14be9e194217b44b3a58785e1a81bfd8870498dca4e6",
     "code/additional/section_flows.py:_hash": "fbe7897d1570a7e1bfbfd177c43f7333d67f6a1a8717d2ceb35c9f2861d04b69",
-    "code/additional/section_flows.py:_prepare_recipe": "bda4d978d6daec8f9bab3c9d9b8d62b3b73bd985f509b8da59a97c064ef233e5",
+    "code/additional/section_flows.py:_prepare_recipe": "da046b212dd6ac9074a982393e648cb9e6dd7ec24eb929e525b78eab9c56558d",
     "code/additional/section_flows.py:_no_path_time": "044f0aefb7e57d8f3949a1c1175d8363163b181b845c44f2c0bb678066bbdb7d",
-    "code/additional/section_flows.py:_station_group": "d00a2b4a4d9d1a073d7a05bbba5a71d02b74d113fec0ce170ab2aff8840ccc63",
+    "code/additional/section_flows.py:_station_group": "6413e8f38e02e61bac5d01c68cff3365278771a793c7a727332daff7179de0db",
+    "code/additional/section_flows.py:_station_selection": "151fd98b722e0382a05b5438f85020a8e6d87892bf6905631abde84a746c4bd8",
     "code/additional/section_flows.py:route_input_signature": "9095352c695f72b0d5b6995d07108528dc984bf72d49e7c829cad29e102f5648",
     "code/additional/section_flows.py:_trace_features": "83261bf748896cb1b6f2c0ef4bd90c2da19744f7b824f312243bb381aff9ab22",
     "code/additional/section_flows.py:_ancestor_sum": "d219e5b695bfcc091515dbdb6137a31530cd4d2e1aacbd12c300f1621e88bfc2",
@@ -1670,7 +1671,7 @@
     "code/additional/section_flows.py:_path": "102d3b7f8fc18fb31d338fc8dd9faf1917cab01c21558f780ea27b281e4e45c1",
     "code/additional/section_flows.py:_DEFAULT_COVERAGE": "0cbff2e6cff4f1e779c4b46180af870d6ef354b4f82188ec27cdede21292f72d",
     "code/additional/section_flows.py:_ensure_recipe_coverage": "7cef10662779643512b0fba0be1cc9f5abfac6fd57ac55159e8b76edb7960e4e",
-    "code/additional/section_flows.py:section_config": "774a6309cddbcdc8120f73f25383b58dba8f0a33765b5e8350bfc38114600b64",
+    "code/additional/section_flows.py:section_config": "041781095cc77d427082cf5c9546fa676892bd90fd14c12a660efb851f6bc817",
     "code/additional/section_flows.py:_selector": "8339b5f5d8380ca4e57aa52c35e114220766b5dab1d3b8049bcb032251ad68a7",
     "code/additional/section_flows.py:_INTERNAL_SECTION": "f54aabcec41d74ee788fe73e002df49ab8ed6ce98365fb6b2af4d43738164d85",
     "code/additional/section_flows.py:_validate_route_inputs": "72a69ad3247429de1742e0ad5e14734493d48abcf76dcde1478aa188818b18fb",
@@ -1828,7 +1829,10 @@
         "EBIKE_SPEED_MULTIPLIER": 1.05,
         "mobility_hubs": [
           {
-            "station": "Forch",
+            "zones": [
+              "15401012"
+            ],
+            "stops_per_zone": 8,
             "effects": {
               "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
@@ -1844,11 +1848,11 @@
               "19501004"
             ],
             "effects": {
-              "access_time_reduction_pct": 10.0,
+              "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
               "transfer_wait_reduction_pct": 0.0,
-              "egress_time_reduction_pct": 10.0
+              "egress_time_reduction_pct": 20.0
             }
           }
         ],
@@ -1875,7 +1879,10 @@
         "EBIKE_SPEED_MULTIPLIER": 1.05,
         "mobility_hubs": [
           {
-            "station": "Forch",
+            "zones": [
+              "15401012"
+            ],
+            "stops_per_zone": 8,
             "effects": {
               "access_time_reduction_pct": 10.0,
               "transfer_time_reduction_pct": 0.0,
@@ -1887,27 +1894,45 @@
           {
             "zones": [
               "19501005",
-              "\t15401012",
+              "15401012",
               "19501004"
             ],
             "effects": {
-              "access_time_reduction_pct": 10.0,
+              "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
               "transfer_wait_reduction_pct": 0.0,
-              "egress_time_reduction_pct": 10.0
+              "egress_time_reduction_pct": 20.0
             }
           }
         ],
         "railway_expansions": [
           {
-            "transfer_wait_reduction_pct": 50.0,
+            "area_pairs": [
+              {
+                "origin": {
+                  "grid_id": [
+                    "16001004",
+                    "15401012",
+                    "19501004",
+                    "19501005",
+                    "19501006"
+                  ]
+                },
+                "destination": {
+                  "municipality_name": [
+                    "K\u00fcsnacht (ZH)"
+                  ]
+                }
+              }
+            ],
+            "both_directions": false,
             "effects": {
-              "travel_time_reduction_pct": 0.0,
+              "travel_time_reduction_pct": 50.0,
               "speed_increase_pct": 0.0,
               "distance_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
-              "transfer_wait_reduction_pct": 0.0,
+              "transfer_wait_reduction_pct": 25.0,
               "transfer_time_reduction_pct": 0.0,
               "access_time_reduction_pct": 0.0,
               "egress_time_reduction_pct": 0.0
@@ -1935,7 +1960,10 @@
         "EBIKE_SPEED_MULTIPLIER": 1.05,
         "mobility_hubs": [
           {
-            "station": "Forch",
+            "zones": [
+              "15401012"
+            ],
+            "stops_per_zone": 8,
             "effects": {
               "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
@@ -1951,15 +1979,18 @@
               "19501004"
             ],
             "effects": {
-              "access_time_reduction_pct": 10.0,
+              "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
               "transfer_wait_reduction_pct": 0.0,
-              "egress_time_reduction_pct": 10.0
+              "egress_time_reduction_pct": 20.0
             }
           },
           {
-            "station": "Forch",
+            "zones": [
+              "15401012"
+            ],
+            "stops_per_zone": 8,
             "effects": {
               "access_time_reduction_pct": 10.0,
               "transfer_time_reduction_pct": 0.0,
@@ -1971,27 +2002,45 @@
           {
             "zones": [
               "19501005",
-              "\t15401012",
+              "15401012",
               "19501004"
             ],
             "effects": {
-              "access_time_reduction_pct": 10.0,
+              "access_time_reduction_pct": 20.0,
               "transfer_time_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
               "transfer_wait_reduction_pct": 0.0,
-              "egress_time_reduction_pct": 10.0
+              "egress_time_reduction_pct": 20.0
             }
           }
         ],
         "railway_expansions": [
           {
-            "transfer_wait_reduction_pct": 50.0,
+            "area_pairs": [
+              {
+                "origin": {
+                  "grid_id": [
+                    "16001004",
+                    "15401012",
+                    "19501004",
+                    "19501005",
+                    "19501006"
+                  ]
+                },
+                "destination": {
+                  "municipality_name": [
+                    "K\u00fcsnacht (ZH)"
+                  ]
+                }
+              }
+            ],
+            "both_directions": false,
             "effects": {
-              "travel_time_reduction_pct": 0.0,
+              "travel_time_reduction_pct": 50.0,
               "speed_increase_pct": 0.0,
               "distance_reduction_pct": 0.0,
               "initial_wait_reduction_pct": 0.0,
-              "transfer_wait_reduction_pct": 0.0,
+              "transfer_wait_reduction_pct": 25.0,
               "transfer_time_reduction_pct": 0.0,
               "access_time_reduction_pct": 0.0,
               "egress_time_reduction_pct": 0.0
@@ -2015,10 +2064,10 @@
       }
     },
     "section_signatures": {
-      "0": "03ca880bb4993962ad9cf0bb088cc3b78caae21f58a552ba4294d4d61c530db6",
-      "1": "03ca880bb4993962ad9cf0bb088cc3b78caae21f58a552ba4294d4d61c530db6",
-      "2": "03ca880bb4993962ad9cf0bb088cc3b78caae21f58a552ba4294d4d61c530db6",
-      "3": "03ca880bb4993962ad9cf0bb088cc3b78caae21f58a552ba4294d4d61c530db6"
+      "0": "73e07842974cec06134b5d8e7c0dc305f10fd9efb8a194d369212f91aaedbfaf",
+      "1": "73e07842974cec06134b5d8e7c0dc305f10fd9efb8a194d369212f91aaedbfaf",
+      "2": "73e07842974cec06134b5d8e7c0dc305f10fd9efb8a194d369212f91aaedbfaf",
+      "3": "73e07842974cec06134b5d8e7c0dc305f10fd9efb8a194d369212f91aaedbfaf"
     },
     "input_domain": {
       "PASSENGER_DEMAND_GROWTH": {
@@ -2119,9 +2168,10 @@
       "code/additional/section_flows.py:_RECIPE_VERSION": "a786c4927daaeb9cae90979a0d5edd423485328b70b0b25c5776c14821ec49e4",
       "code/additional/section_flows.py:_read_coverage": "344b5482e12aef81ee6d14be9e194217b44b3a58785e1a81bfd8870498dca4e6",
       "code/additional/section_flows.py:_hash": "fbe7897d1570a7e1bfbfd177c43f7333d67f6a1a8717d2ceb35c9f2861d04b69",
-      "code/additional/section_flows.py:_prepare_recipe": "bda4d978d6daec8f9bab3c9d9b8d62b3b73bd985f509b8da59a97c064ef233e5",
+      "code/additional/section_flows.py:_prepare_recipe": "da046b212dd6ac9074a982393e648cb9e6dd7ec24eb929e525b78eab9c56558d",
       "code/additional/section_flows.py:_no_path_time": "044f0aefb7e57d8f3949a1c1175d8363163b181b845c44f2c0bb678066bbdb7d",
-      "code/additional/section_flows.py:_station_group": "d00a2b4a4d9d1a073d7a05bbba5a71d02b74d113fec0ce170ab2aff8840ccc63",
+      "code/additional/section_flows.py:_station_group": "6413e8f38e02e61bac5d01c68cff3365278771a793c7a727332daff7179de0db",
+      "code/additional/section_flows.py:_station_selection": "151fd98b722e0382a05b5438f85020a8e6d87892bf6905631abde84a746c4bd8",
       "code/additional/section_flows.py:route_input_signature": "9095352c695f72b0d5b6995d07108528dc984bf72d49e7c829cad29e102f5648",
       "code/additional/section_flows.py:_trace_features": "83261bf748896cb1b6f2c0ef4bd90c2da19744f7b824f312243bb381aff9ab22",
       "code/additional/section_flows.py:_ancestor_sum": "d219e5b695bfcc091515dbdb6137a31530cd4d2e1aacbd12c300f1621e88bfc2",
@@ -2129,7 +2179,7 @@
       "code/additional/section_flows.py:_path": "102d3b7f8fc18fb31d338fc8dd9faf1917cab01c21558f780ea27b281e4e45c1",
       "code/additional/section_flows.py:_DEFAULT_COVERAGE": "0cbff2e6cff4f1e779c4b46180af870d6ef354b4f82188ec27cdede21292f72d",
       "code/additional/section_flows.py:_ensure_recipe_coverage": "7cef10662779643512b0fba0be1cc9f5abfac6fd57ac55159e8b76edb7960e4e",
-      "code/additional/section_flows.py:section_config": "774a6309cddbcdc8120f73f25383b58dba8f0a33765b5e8350bfc38114600b64",
+      "code/additional/section_flows.py:section_config": "041781095cc77d427082cf5c9546fa676892bd90fd14c12a660efb851f6bc817",
       "code/additional/section_flows.py:_selector": "8339b5f5d8380ca4e57aa52c35e114220766b5dab1d3b8049bcb032251ad68a7",
       "code/additional/section_flows.py:_INTERNAL_SECTION": "f54aabcec41d74ee788fe73e002df49ab8ed6ce98365fb6b2af4d43738164d85",
       "code/additional/section_flows.py:_validate_route_inputs": "72a69ad3247429de1742e0ad5e14734493d48abcf76dcde1478aa188818b18fb",
@@ -2208,14 +2258,15 @@
     "code/adaptive_planning.py": "64a7dd6755203002f320402891aea54c05c32d019ef8fbbf594f221b113d5d89",
     "code/additional/__init__.py": "08789750d626c1d87b2f4bec866dafb18e3a2e6eb928c95c2b35c61433601c9a",
     "code/additional/notebook_exports.py": "1abb5f3fd790693f1b46783f71a36a318101d70b04d3ff92832f97ddb66e3d19",
-    "code/additional/section_flows.py": "0e304de867234744e33232572647348be25882973e8651218eb188d66c09523d",
+    "code/additional/section_flows.py": "aa7915f4de4fdcd6ae5e7a43e6af30db3ae6dbda3491ba77e65808719413b62b",
+    "code/additional/section_flows_pre_patch.py": "0e304de867234744e33232572647348be25882973e8651218eb188d66c09523d",
     "code/additional/transport_display.py": "a31fe0855d12fecb874492a9333010d393638bbe21af7e483467963894570364",
     "code/additional/trigger_optimization.py": "18fd8b4300761ee47476fe47a22997badda310de88cb47b9d05cce6e9a3f5135",
     "code/additional/uncertainty.py": "039fca048e427e7d3a1b149710d75972924c37a2d1d594e4e3cbaf7c8d7ab4a3",
     "code/parameters - Copy.py": "0fb4d08449160cdeafb91afc657083a6c384de5b427386f2e0830402762ba66d",
-    "code/parameters.py": "621fb9b5db8b91c7070e657fceb4018c1b386e0a7b45953b5428fadad842a699",
+    "code/parameters.py": "341d3d61eadcdc69511c4b8ace19a08dde78b18e1034a277aa4e8363bd6a4362",
     "code/simulation_engine.py": "72b0f369364272978048a5fa3ddabab7c47355766ffffe7ec6c7b00cef844a8e",
-    "code/stages.py": "f20f443094a52f4795302ed68884bb10b61f2efb5032e9d39b1808009c41c6d9",
+    "code/stages.py": "5c567f69057fc4df5fdedc2eea6c2aff517b326398b851f42b9cb2f1285dcf23",
     "code/surrogate_model/__init__.py": "e14f9360129c8a8d333cee6c7b17230d83b71c55fd9c2e467149a28a44948039",
     "code/surrogate_model/build_transport_surrogate.py": "69e2f0c6f52dc75ee547d7ac6d2cebe79d1243044a98b6ab80bf729135113d63",
     "code/surrogate_model/od_gp.py": "9b82a8b74e117e2c49ed4082ea44752153894071bb7d09088534abcf2dc6879c",
@@ -2240,14 +2291,15 @@
     "code/adaptive_planning.py": "64a7dd6755203002f320402891aea54c05c32d019ef8fbbf594f221b113d5d89",
     "code/additional/__init__.py": "08789750d626c1d87b2f4bec866dafb18e3a2e6eb928c95c2b35c61433601c9a",
     "code/additional/notebook_exports.py": "1abb5f3fd790693f1b46783f71a36a318101d70b04d3ff92832f97ddb66e3d19",
-    "code/additional/section_flows.py": "0e304de867234744e33232572647348be25882973e8651218eb188d66c09523d",
+    "code/additional/section_flows.py": "aa7915f4de4fdcd6ae5e7a43e6af30db3ae6dbda3491ba77e65808719413b62b",
+    "code/additional/section_flows_pre_patch.py": "0e304de867234744e33232572647348be25882973e8651218eb188d66c09523d",
     "code/additional/transport_display.py": "a31fe0855d12fecb874492a9333010d393638bbe21af7e483467963894570364",
     "code/additional/trigger_optimization.py": "18fd8b4300761ee47476fe47a22997badda310de88cb47b9d05cce6e9a3f5135",
     "code/additional/uncertainty.py": "039fca048e427e7d3a1b149710d75972924c37a2d1d594e4e3cbaf7c8d7ab4a3",
     "code/parameters - Copy.py": "0fb4d08449160cdeafb91afc657083a6c384de5b427386f2e0830402762ba66d",
-    "code/parameters.py": "621fb9b5db8b91c7070e657fceb4018c1b386e0a7b45953b5428fadad842a699",
+    "code/parameters.py": "341d3d61eadcdc69511c4b8ace19a08dde78b18e1034a277aa4e8363bd6a4362",
     "code/simulation_engine.py": "72b0f369364272978048a5fa3ddabab7c47355766ffffe7ec6c7b00cef844a8e",
-    "code/stages.py": "f20f443094a52f4795302ed68884bb10b61f2efb5032e9d39b1808009c41c6d9",
+    "code/stages.py": "5c567f69057fc4df5fdedc2eea6c2aff517b326398b851f42b9cb2f1285dcf23",
     "code/surrogate_model/__init__.py": "e14f9360129c8a8d333cee6c7b17230d83b71c55fd9c2e467149a28a44948039",
     "code/surrogate_model/build_transport_surrogate.py": "69e2f0c6f52dc75ee547d7ac6d2cebe79d1243044a98b6ab80bf729135113d63",
     "code/surrogate_model/od_gp.py": "9b82a8b74e117e2c49ed4082ea44752153894071bb7d09088534abcf2dc6879c",

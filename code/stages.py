@@ -252,10 +252,37 @@ PACKAGES = {
         # Railway improvements: the same section and service OD scope as above.
         "railway_expansions": [
             {
-                "headway_reduction_min": 0.0,  # Minutes removed from the baseline service interval.
-                "capacity_increase": 0.0,  # Fraction of baseline peak-hour comfort capacity (+15%).
+                "name": "Higher frequency for the Bus line to Glattal",
+                "area_pairs": [
+                    {
+                        "origin": {"grid_id": ["16001004", "15401012","19501004","19501005","19501006"]},
+                        "destination": {"municipality_name": ["Maur", "Fällanden", "Schwerzenbach"]},
+                    }
+                ],
+                "both_directions": False,
+                "effects": {
+                    "initial_wait_reduction_pct": 50.0,
+                    "transfer_wait_reduction_pct": 25.0,
+                    
+                }
             }
         ],
+        "railway_expansions": [
+                    {
+                        "name": "Extension of the Bus line to Küsnacht",
+                        "area_pairs": [
+                            {
+                                "origin": {"grid_id": ["16001004", "15401012","19501004","19501005","19501006"]},
+                                "destination": {"municipality_name": ["Küsnacht (ZH)"]},
+                            }
+                        ],
+                        "both_directions": False,
+                        "effects": {
+                            "transfer_wait_reduction_pct": 25.0,
+                            "travel_time_reduction_pct": 50.0
+                        }
+                    }
+                ],
 
         # Hub & Node Interventions
         "mobility_hubs": [
